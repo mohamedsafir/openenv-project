@@ -1,0 +1,7 @@
+name: openenv_project
+version: 1.0
+description: Real-world task simulation environment
+tasks:
+  - easy
+  - medium
+  - hard
