@@ -1,3 +1,12 @@
+---
+title: RL Open Env Assessment
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+---
 # 🚀 OpenEnv RL Task Evaluation System
 
 ## 📌 Project Overview
