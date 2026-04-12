@@ -1,9 +1,9 @@
-def grade_hard(output, task):
+def grade_medium(output, task):
     output = str(output).replace(" ", "")
 
-    if "a/b" in output:
+    if output == task.get("answer", ""):
         return 0.9
-    elif "/" in output:
+    elif all(x in output for x in ["1", "2", "3", "4", "5"]):
         return 0.5
     else:
-        return 0.1  # NOT 0.0
+        return 0.1
