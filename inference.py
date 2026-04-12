@@ -9,7 +9,7 @@ from env.environment import OpenEnv
 API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4.1-mini")
 API_KEY = os.environ.get("API_KEY")
-# ✅ Fallback for local testing only
+#  Fallback for local testing only
 if not API_KEY:
     API_KEY = "test_key"
     API_BASE_URL = "https://api.openai.com/v1"
@@ -130,9 +130,9 @@ def step(req: StepRequest):
             }
 
         real_reward = safe_score(reward)
-        # 🔥 FORCE SAFE SCORE RANGE (VALIDATOR SAFE)
+        #  FORCE SAFE SCORE RANGE (VALIDATOR SAFE)
         raw_score = info.get("score", reward)
-        # 🔥 FORCE DIFFERENCE FROM REWARD
+        #  FORCE DIFFERENCE FROM REWARD
         if abs(raw_score - reward) < 0.01:
             raw_score = raw_score - 0.05 if raw_score > 0.5 else raw_score + 0.05
 
@@ -149,8 +149,8 @@ def step(req: StepRequest):
             "task": task,
             "state": "done" if done else "in_progress"
         },
-        "reward": real_reward,   # ✅ reward stays reward
-        "score": real_score,     # ✅ score from grader
+        "reward": real_reward,   #  reward stays reward
+        "score": real_score,     #  score from grader
         "done": bool(done),
         "info": {
         "score": real_score,
@@ -177,7 +177,7 @@ def run_task(level):
     # ONLY ONE START
     print(f"[START] task={level} env=openenv model={MODEL_NAME}")
 
-    # 🔥 FORCE LLM CALL (ignore result)
+    #  FORCE LLM CALL (ignore result)
     try:
         client.chat.completions.create(
             model=MODEL_NAME,
@@ -201,7 +201,7 @@ def run_task(level):
 
     obs, reward, done, info = env_local.step(Action(action))
 
-    # ✅ STRICT FORMAT (2 decimal places)
+    #  STRICT FORMAT (2 decimal places)
     print(f"[STEP] step=1 action={action} reward={reward:.2f} done=true error=null")
     print(f"[END] success=true steps=1 rewards={reward:.2f}")
 
