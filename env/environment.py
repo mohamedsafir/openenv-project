@@ -2,7 +2,6 @@ from env.models import Observation
 from tasks.easy_task import get_easy_task
 from tasks.medium_task import get_medium_task
 from tasks.hard_task import get_hard_task
-
 from graders.easy_grader import grade_easy
 from graders.medium_grader import grade_medium
 from graders.hard_grader import grade_hard
@@ -37,7 +36,7 @@ class OpenEnv:
         )
 
     def step(self, action):
-        # ✅ Handle already finished case safely
+    # already finished
         if self.done:
             return (
                 Observation(
@@ -45,43 +44,49 @@ class OpenEnv:
                     state="done",
                     message="Task already completed"
                 ),
-                0.0,
+                0.5,
                 True,
-                {"score": 1.0, "steps": self.steps}
+                {"score": 0.5, "steps": self.steps}
             )
 
         self.steps += 1
-
-        # ✅ Safe action handling
         content = getattr(action, "content", "")
 
-        # 🔍 grading
-        if self.current_task == "easy":
+            # grading
+        if self.current_task == "easy":     
             score = grade_easy(content, self.task_data)
         elif self.current_task == "medium":
             score = grade_medium(content, self.task_data)
         else:
             score = grade_hard(content, self.task_data)
 
-        # 🎯 reward shaping
-        if score == 1.0:
-            reward = 1.0
-            self.done = True
-        elif score == 0.5:
-            reward = 0.3
-        else:
-            reward = -0.2
+        #  ULTRA SAFE SCORE FIX (FINAL)
+        try:
+            score = float(score)
+        except:
+            score = 0.1
 
-        # ⚠️ penalty for too many attempts
+        if score <= 0.0:
+            score = 0.1
+        elif score >= 1.0:
+            score = 0.9
+
+        # 🎯 IMPORTANT: reward = score (STRICT MATCH)
+        reward = score
+
+        # done logic
+        if score > 0.7:
+            self.done = True
+
+        # max steps safety
         if self.steps > 3 and not self.done:
-            reward -= 0.5
             self.done = True
 
         return (
             Observation(
                 task=self.current_task or "unknown",
-                state = "done" if self.done else "in_progress",
-                message = f"Step {self.steps} processed"
+                state="done" if self.done else "in_progress",
+                message=f"Step {self.steps} processed"
             ),
             reward,
             self.done,
