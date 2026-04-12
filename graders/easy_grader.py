@@ -1,9 +1,9 @@
 def grade_easy(output, task):
-    output = output.lower()
+    output = str(output).lower()
 
     if "spam" in output:
-        return 1.0
-    elif any(word in output for word in task["keywords"]):
-        return 0.5  # partial understanding
+        return 0.9
+    elif any(word in output for word in task.get("keywords", [])):
+        return 0.5
     else:
-        return 0.0
+        return 0.1  # NOT 0.0
