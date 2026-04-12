@@ -42,11 +42,12 @@ class ResetRequest(BaseModel):
     task: str = "easy"
 
 
-#  FIX IS HERE — added action_type and content fields
+#   added action_type and content fields
 class StepRequest(BaseModel):
     action: str = ""
     action_type: str = "text"
-    content: str = ""  # ← validator sends the answer in THIS field
+    content: str = ""
+    model_config = {"extra": "allow"} # ADD THIS
 
 
 def get_ai_response(prompt, level="easy"):
